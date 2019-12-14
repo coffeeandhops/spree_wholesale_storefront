@@ -11,6 +11,10 @@ module SpreeWholesaleStorefront
         ::Spree::Price.new(variant_id: self.id, amount: self.wholesale_price, currency: currency)
       end
 
+      def is_wholesaleable?
+        wholesale_price.present?
+      end
+
     end
   end
 end
