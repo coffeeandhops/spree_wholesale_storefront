@@ -1,6 +1,6 @@
 FactoryBot.define do
   factory :wholesaler, class: Spree::Wholesaler do
-    user { create(:user) }
+    user { create(:wholesale_user) }
     bill_address { create(:bill_address) }
     ship_address { create(:ship_address) }
     company { "Test Company" }

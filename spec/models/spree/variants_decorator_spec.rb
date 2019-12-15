@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::Variant do
-  describe "#price_in" do
+  describe "wholesale variants" do
     it "returns the wholesale price if it is present" do
       variant = create(:variant, wholesale_price: 8.00)
       expected = Spree::Price.new(variant_id: variant.id, currency: "USD", amount: variant.wholesale_price)

@@ -10,9 +10,23 @@ module SpreeWholesaleStorefront
       def copy_price
         super
         if variant
-          # TODO: CHECK IF ORDER IS WHOLESALEABLE
-          self.price = (variant.is_wholesaleable? ? variant.wholesale_price : variant.price)
+          self.price = order.is_wholesale? && variant.is_wholesaleable? ? variant.wholesale_price : variant.price
         end
+      end
+
+      # def update_price
+      #   price_to_use = (order.is_wholesale? && variant.is_wholesaleable?) ? :wholesale_price : :price
+      #   pp "PRICE TO USE"
+      #   pp price_to_use
+      #   self.price = variant.price_including_vat_for(tax_zone: tax_zone, use_price: price_to_use)
+      # end
+
+      def total_wholesale_price
+        wholesale_price * quantity
+      end
+      
+      def display_wholesale_price
+        ::Spree::Money.new(wholesale_price, currency: currency)
       end
 
     end
