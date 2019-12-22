@@ -32,9 +32,7 @@ describe Spree::Order do
       wholesale_over_min.line_items.first.quantity = 10
       wholesale_over_min.line_items.first.save!
       wholesale_over_min.update_with_updater!
-      pp wholesale_over_min
-      pp wholesale_over_min.line_items.first
-      pp wholesale_over_min.line_items.first.variant.price
+
       expect(wholesale_over_min.is_wholesale?).to be false
     end
 

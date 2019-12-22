@@ -3,15 +3,11 @@ module SpreeWholesaleStorefront
     module ProductDecorator
       def self.prepended(base)
         base.scope :wholesaleable, -> { joins('LEFT OUTER JOIN "spree_variants" ON "spree_variants"."product_id" = "spree_products"."id"')
-            .where("spree_variants.wholesale_price NOT NULL AND spree_variants.wholesale_price > 0.0") }
-            
-        base.delegate :wholesale_price, to: :master if ::Spree::Variant.table_exists? && ::Spree::Variant.column_names.include?("wholesale_price")
-      end
+            .joins('LEFT OUTER JOIN "spree_prices" ON "spree_prices"."variant_id" = "spree_variants"."id"')
+            .where("spree_prices.amount NOT NULL AND spree_prices.type = 'Spree::WholesalePrice'") }
 
-      def is_wholesaleable?
-        master.wholesale_price.present?
+        base.delegate :wholesale_price, :is_wholesaleable?, to: :master
       end
-
     end
   end
 end

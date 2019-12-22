@@ -26,10 +26,6 @@ describe Spree::Product do
       variant.save!
       variant.reload
 
-      variant2.wholesale_price = 0.0
-      variant2.save!
-      variant2.reload
-
       wholesale_products = Spree::Product.wholesaleable
       expect(wholesale_products.count).to eq(1)
     end
