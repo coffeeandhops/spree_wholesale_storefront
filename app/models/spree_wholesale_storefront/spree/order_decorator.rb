@@ -17,7 +17,7 @@ module SpreeWholesaleStorefront
 
       def minimum_order
         minimum = ::Spree::WholesaleStorefront::Config[:minimum_order]
-        wholesale_item_total > minimum
+        wholesale_item_total >= minimum
       end
     end
   end

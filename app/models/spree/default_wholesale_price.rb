@@ -8,8 +8,7 @@ module Spree
               class_name: '::Spree::WholesalePrice',
               dependent: :destroy
 
-      
-      delegate :wholesale_price, :wholesale_price=, to: :find_or_build_default_wholesale_price
+      delegate :wholesale_price, :wholesale_price=, :wholesale_currency=, to: :find_or_build_default_wholesale_price
 
       after_save :save_default_wholesale_price
 
@@ -25,8 +24,8 @@ module Spree
         find_or_build_default_wholesale_price.display_amount
       end
 
-      def wholesale_price_including_vat_for
-        find_or_build_default_wholesale_price.price_including_vat_for
+      def wholesale_price_including_vat_for(price_options)
+        find_or_build_default_wholesale_price.price_including_vat_for(price_options)
       end
 
       def default_wholesale_price
