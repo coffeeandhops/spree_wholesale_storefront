@@ -3,6 +3,8 @@ module SpreeWholesaleStorefront
     module UserDecorator
       def self.prepended(base)
         base.has_one :wholesaler, class_name: "Spree::Wholesaler"
+        base.accepts_nested_attributes_for :wholesaler
+
         base.scope :wholesale, lambda { includes(:spree_roles).where("spree_roles.name" => "wholesaler") }
       end
 

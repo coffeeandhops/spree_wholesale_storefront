@@ -1,14 +1,14 @@
 module Spree
   class Wholesaler < ActiveRecord::Base
     belongs_to :user, class_name: Spree.user_class.to_s
-    belongs_to :bill_address, foreign_key: "billing_address_id", class_name: "Spree::Address", dependent: :destroy
-    belongs_to :ship_address, foreign_key: "shipping_address_id", class_name: "Spree::Address", dependent: :destroy
+    # belongs_to :bill_address, foreign_key: "billing_address_id", class_name: "Spree::Address", dependent: :destroy
+    # belongs_to :ship_address, foreign_key: "shipping_address_id", class_name: "Spree::Address", dependent: :destroy
     
-    accepts_nested_attributes_for :bill_address
-    accepts_nested_attributes_for :ship_address
-    accepts_nested_attributes_for :user
+    # accepts_nested_attributes_for :bill_address
+    # accepts_nested_attributes_for :ship_address
+    # accepts_nested_attributes_for :user
 
-    before_validation :clone_billing_address, if: :use_billing
+    # before_validation :clone_billing_address, if: :use_billing
     validates :company, :buyer_contact, :phone, presence: true
     
     delegate :spree_roles, to: :user
@@ -40,14 +40,14 @@ module Spree
       @role = Spree::Role.find_or_create_by_name("wholesaler")
     end
   
-    def clone_billing_address
-      if bill_address and self.ship_address.nil?
-        self.ship_address = bill_address.clone
-      else
-        self.ship_address.attributes = bill_address.attributes.except("id", "updated_at", "created_at") if bill_address
-      end
-      true
-    end
+    # def clone_billing_address
+    #   if bill_address and self.ship_address.nil?
+    #     self.ship_address = bill_address.clone
+    #   else
+    #     self.ship_address.attributes = bill_address.attributes.except("id", "updated_at", "created_at") if bill_address
+    #   end
+    #   true
+    # end
   end
 end
 

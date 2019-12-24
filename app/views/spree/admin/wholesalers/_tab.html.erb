@@ -1,0 +1,5 @@
+<% if Spree.user_class && can?(:admin, Spree.user_class) %>
+  <ul class='nav nav-sidebar border-bottom'>
+    <%= tab "Wholesalers", url: spree.admin_wholesalers_path, icon: 'briefcase' %>
+  </ul>
+<% end %>

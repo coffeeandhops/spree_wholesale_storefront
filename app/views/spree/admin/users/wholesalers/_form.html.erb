@@ -1,0 +1,37 @@
+<div data-hook="admin_user_wholesaler_form" class="card mb-3">
+  <div class="card-header">
+    <h1 class="card-title mb-0 h5">
+      Wholesaler Account Details
+    </h1>
+  </div>
+  <% if @wholesaler.new_record? %>
+    <div class="card-body">
+      <button type="button" id="create_wholesaler_button" class="wholesaler_toggle_button btn btn-success">Create Wholesale Account</button>
+      <div class="d-none hidden" id="create_wholesaler_form">
+        <%= form_for [:admin, @wholesaler], :html => { :class => "wholesaler-form" } do |f| %>
+          <%= render partial: 'spree/admin/users/wholesalers/fields', locals: { f: f } %>
+
+          <div data-hook="admin_user_edit_form_button">
+            <div class="form-actions" data-hook="buttons">
+              <%= button Spree.t('actions.new'), 'ok', 'submit', {class: 'btn-success', data: { disable_with: "#{ Spree.t(:saving) }..." }} %>
+              <button type="button" icon="cancel" class="wholesaler_toggle_button btn btn-danger">
+                <span class="icon icon-delete"></span>
+                Cancel
+              </button>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  <% else %>
+    <div class="card-body" id="edit_wholesaler_form">
+      <%= form_for [:admin, @wholesaler], :html => { :class => "wholesaler-form" } do |f| %>
+        <%= render partial: 'spree/admin/users/wholesalers/fields', locals: { f: f } %>
+
+        <div data-hook="admin_user_edit_form_button">
+          <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.admin_users_url } %>
+        </div>
+      <% end %>
+    </div>
+  <% end %>
+</div>

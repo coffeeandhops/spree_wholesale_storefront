@@ -2,4 +2,8 @@
 # See https://github.com/svenfuchs/rails-i18n/tree/master/rails%2Flocale for starting points.
 
 en:
-  hello: "Hello world"
+  spree:
+    spree_wholesale_storefront:
+      wholesalers: Wholesalers
+      wholesale_configuration: Wholesale Settings
+      minimum_order: Minimum Wholesale Order Value
