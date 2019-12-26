@@ -9,7 +9,7 @@ module Spree
 
         @collection = ::Spree.user_class.where(nil)
         @search = @collection.ransack(params[:q])
-        @collection = @search.result.wholesale.page(params[:page]).per(::Spree::Config[:admin_users_per_page])
+        @wholesalers = @search.result.wholesale.page(params[:page]).per(::Spree::Config[:admin_users_per_page])
       end
 
       def create

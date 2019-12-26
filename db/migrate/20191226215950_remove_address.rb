@@ -3,6 +3,5 @@ class RemoveAddress < ActiveRecord::Migration[6.0]
     remove_column :spree_wholesalers, :billing_address_id, :integer
     remove_column :spree_wholesalers, :shipping_address_id, :integer
     remove_column :spree_wholesalers, :use_billing, :boolean
-    remove_index :spree_wholesalers, name: "wholesalers_addresses"
   end
 end
