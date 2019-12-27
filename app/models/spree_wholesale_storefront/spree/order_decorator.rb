@@ -3,6 +3,10 @@ module SpreeWholesaleStorefront
     module OrderDecorator
       def self.prepended(base)
         base.preference :minimum_wholesale_order, :decimal, default: 300.0
+
+        base.extend ::Spree::DisplayMoney
+        base.money_methods :wholesale_item_total
+
       end
 
       def is_wholesale?
