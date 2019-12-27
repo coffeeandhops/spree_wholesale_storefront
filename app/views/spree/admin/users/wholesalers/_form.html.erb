@@ -27,10 +27,12 @@
     <div class="card-body" id="edit_wholesaler_form">
       <%= form_for [:admin, @wholesaler], :html => { :class => "wholesaler-form" } do |f| %>
         <%= render partial: 'spree/admin/users/wholesalers/fields', locals: { f: f } %>
-
         <div data-hook="admin_user_edit_form_button">
           <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.admin_users_url } %>
         </div>
+          <%= form_tag spree.admin_wholesaler_path(@wholesaler), method: :delete do %>
+            <%= button Spree.t('spree_wholesale_storefront.actions.destroy'), 'delete', 'submit', {class: 'btn-danger mt-3', data: { disable_with: "#{ Spree.t(:deleting) }..." }} %>
+          <% end %>
       <% end %>
     </div>
   <% end %>

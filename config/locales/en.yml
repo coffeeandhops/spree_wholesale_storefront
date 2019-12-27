@@ -7,3 +7,10 @@ en:
       wholesalers: Wholesalers
       wholesale_configuration: Wholesale Settings
       minimum_order: Minimum Wholesale Order Value
+      success: "Wholesaler account created"
+      failed: "Wholesaler account creation failed"
+      update_success: "Wholesaler account updated"
+      update_failed: "Wholesaler account updated failed"
+      destroy_success: "Wholesaler account deleted"
+      actions:
+          destroy: Delete Account
