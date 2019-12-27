@@ -2,7 +2,7 @@ module SpreeWholesaleStorefront
   module Spree
     module UserDecorator
       def self.prepended(base)
-        base.has_one :wholesaler, class_name: "Spree::Wholesaler"
+        base.has_one :wholesaler, class_name: "Spree::Wholesaler", dependent: :destroy
         base.accepts_nested_attributes_for :wholesaler
 
         base.scope :wholesale, -> { joins(:wholesaler).where("spree_wholesalers.user_id IS NOT NULL") }
