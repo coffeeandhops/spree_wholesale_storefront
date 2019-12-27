@@ -5,11 +5,11 @@ module SpreeWholesaleStorefront
         base.has_one :wholesaler, class_name: "Spree::Wholesaler"
         base.accepts_nested_attributes_for :wholesaler
 
-        base.scope :wholesale, lambda { includes(:spree_roles).where("spree_roles.name" => "wholesaler") }
+        base.scope :wholesale, -> { joins(:wholesaler).where("spree_wholesalers.user_id IS NOT NULL") }
       end
 
       def wholesaler?
-        has_spree_role?("wholesaler") && !wholesaler.nil?
+        !wholesaler.nil?
       end
 
     end
