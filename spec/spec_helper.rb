@@ -19,6 +19,7 @@ require 'rspec/rails'
 require 'ffaker'
 require 'pry'
 require 'shoulda-matchers'
+require 'jsonapi/rspec'
 
 # Requires supporting ruby files with custom matchers and macros, etc,
 # in spec/support/ and its subdirectories.
@@ -31,6 +32,12 @@ require 'spree/testing_support/controller_requests'
 require 'spree/testing_support/factories'
 require 'spree/testing_support/url_helpers'
 
+require 'spree/api/testing_support/caching'
+require 'spree/api/testing_support/helpers'
+require 'spree/api/testing_support/setup'
+require 'spree/api/testing_support/v2/base'
+require 'spree/api/testing_support/v2/current_order'
+
 RSpec.configure do |config|
   # Infer an example group's spec type from the file location.
   config.infer_spec_type_from_file_location!
@@ -42,6 +49,10 @@ RSpec.configure do |config|
   # visit spree.admin_path
   # current_path.should eql(spree.products_path)
   config.include Spree::TestingSupport::UrlHelpers
+
+  config.include Spree::Api::TestingSupport::Helpers, type: :controller
+  config.include Spree::Api::TestingSupport::Helpers, type: :request
+  config.extend Spree::Api::TestingSupport::Setup, type: :controller
 
   # == Mock Framework
   #

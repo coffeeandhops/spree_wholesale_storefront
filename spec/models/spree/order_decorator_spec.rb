@@ -8,6 +8,7 @@ describe Spree::Order do
     let(:user) { create(:user) }
     let(:wholesale_with_normal_user) { create(:wholesale_over_min, user: user) }
     let(:wholesale_under_min) { create(:wholesale_over_min, line_items_quantity: 29, line_items_price: 20.00) }
+    let(:wholesale_over_min_multi) { create(:wholesale_over_min_multi, line_items_price: 25.00, line_items_quantity: 20, item_count: 2) }
 
 
     it { is_expected.to respond_to(:is_wholesale?) }
@@ -49,14 +50,15 @@ describe Spree::Order do
     end
 
     it "should note be a wholesale order if line_item removed" do
-      item_price = wholesale_over_min.line_items.last.price
+      item_price = wholesale_over_min_multi.line_items.last.price
 
-      wholesale_over_min.line_items.last.quantity = 20
-      wholesale_over_min.line_items.last.save
-      wholesale_over_min.update_with_updater!
+      i = wholesale_over_min_multi.line_items.last
+      i.destroy!
+      wholesale_over_min_multi.line_items.reload
+      wholesale_over_min_multi.update_with_updater!
 
-      expect(wholesale_over_min.is_wholesale?).to be false
-      expect(wholesale_over_min.item_total).to eq(item_price * 20)
+      expect(wholesale_over_min_multi.is_wholesale?).to be false
+      expect(wholesale_over_min_multi.item_total).to eq(item_price * 20)
     end
   end
 end
