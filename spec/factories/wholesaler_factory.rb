@@ -9,5 +9,6 @@ FactoryBot.define do
     alternate_email { "alternate@testcompany.com" }
     notes { "Some sort of note" }
     bio { "This is my bio!" }
+    business_address { create(:business_address) }
   end
 end

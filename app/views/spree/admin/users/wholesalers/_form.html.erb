@@ -1,8 +1,23 @@
 <div data-hook="admin_user_wholesaler_form" class="card mb-3">
   <div class="card-header">
-    <h1 class="card-title mb-0 h5">
-      Wholesaler Account Details
-    </h1>
+    <div class="row pb-0">
+      <div class="col-6">
+        <h1 class="card-title mb-0 h5">
+          Wholesaler Account Details
+        </h1>
+      </div>
+      <div class="col-6">
+        <% if !@wholesaler.new_record? %>
+          <%= form_for [:admin, @wholesaler], :html => { :class => "wholesaler-form pull-right float-right" } do |f| %>
+            <%= button_to "Delete Account", spree.admin_wholesaler_path(@wholesaler),
+              :method => :delete,
+              class: "btn btn-danger",
+              data: { confirm: Spree.t(:are_you_sure), action: 'remove' }%>
+          <% end %>
+        <% end %>
+      </div>
+
+    </div>
   </div>
   <% if @wholesaler.new_record? %>
     <div class="card-body">
@@ -26,13 +41,13 @@
   <% else %>
     <div class="card-body" id="edit_wholesaler_form">
       <%= form_for [:admin, @wholesaler], :html => { :class => "wholesaler-form" } do |f| %>
+        
         <%= render partial: 'spree/admin/users/wholesalers/fields', locals: { f: f } %>
+
         <div data-hook="admin_user_edit_form_button">
           <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.admin_users_url } %>
         </div>
-          <%= form_tag spree.admin_wholesaler_path(@wholesaler), method: :delete do %>
-            <%= button Spree.t('spree_wholesale_storefront.actions.destroy'), 'delete', 'submit', {class: 'btn-danger mt-3', data: { disable_with: "#{ Spree.t(:deleting) }..." }} %>
-          <% end %>
+
       <% end %>
     </div>
   <% end %>
