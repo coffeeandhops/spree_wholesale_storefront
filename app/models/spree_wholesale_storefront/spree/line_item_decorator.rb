@@ -12,6 +12,7 @@ module SpreeWholesaleStorefront
       end
 
       def total_wholesale_price
+        return 0.0 if variant.nil? || wholesale_price.nil? || quantity.nil?
         wholesale_price * quantity
       end
       

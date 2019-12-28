@@ -30,5 +30,24 @@ describe Spree::Product do
       expect(wholesale_products.count).to eq(1)
     end
 
+    context 'when master default wholesale price changed' do
+      before do
+        master = product.master
+        master.wholesale_price = 11
+        master.save!
+        product.master.wholesale_price = 12
+      end
+
+      it 'saves the master' do
+        expect(product.master).to receive(:save!)
+        product.save
+      end
+
+      it 'saves the default wholesale price' do
+        expect(product.master.default_wholesale_price).to receive(:save)
+        product.save
+      end
+    end
+
   end
 end

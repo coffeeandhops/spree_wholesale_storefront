@@ -8,14 +8,6 @@ module SpreeWholesaleStorefront
       end
 
       def self.prepended(base)
-        base.has_many :prices,
-          lambda {
-            where(type: 'Spree::Price')
-          },
-          class_name: '::Spree::Price',
-          dependent: :destroy,
-          inverse_of: :variant
-
         base.has_many :wholesale_prices,
           class_name: '::Spree::WholesalePrice',
           dependent: :destroy,
