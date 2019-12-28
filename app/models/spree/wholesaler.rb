@@ -3,7 +3,7 @@ module Spree
     belongs_to :user, class_name: Spree.user_class.to_s
     belongs_to :business_address, dependent: :destroy, class_name: "Spree::BusinessAddress"
 
-    validates :buyer_contact, presence: true
+    validates :main_contact, presence: true
 
     accepts_nested_attributes_for :business_address
     

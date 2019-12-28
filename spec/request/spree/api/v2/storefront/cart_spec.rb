@@ -7,6 +7,7 @@ describe 'API V2 Storefront Cart Spec', type: :request do
   let(:user)  { create(:user) }
   let(:wholesale_user)  { create(:wholesale_user) }
   let(:order) { create(:order, user: user, store: store, currency: currency) }
+
   let(:wholesale_over_min) { create(:wholesale_over_min, line_items_price: 20.00) }
   let(:wholesale_over_min_multi) { create(:wholesale_over_min_multi, line_items_price: 25.00, line_items_quantity: 20, item_count: 2) }
   let(:wholesale_under_min) { create(:wholesale_over_min, line_items_quantity: 29, line_items_price: 20.00) }

@@ -45,7 +45,7 @@ module Spree
 
       def wholesaler_params
         params.require(:wholesaler).permit([
-          :company, :buyer_contact, :manager_contact, :web_address, :phone, :notes,:user_id, :alternate_email,
+          :main_contact, :alternate_contact, :web_address, :notes, :user_id, :alternate_email,
           :business_address_attributes => [
             :address1, :address2, :city, :zipcode, :phone, :state_name, :alternative_phone, :company, :state_id, :country_id
           ]

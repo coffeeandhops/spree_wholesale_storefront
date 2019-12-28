@@ -6,7 +6,7 @@ describe Spree::Wholesaler do
     it { should belong_to :user }
     it { should belong_to :business_address }
  
-    it { should validate_presence_of :buyer_contact }
+    it { should validate_presence_of :main_contact }
   end
 
   context "with a new wholesaler" do
@@ -35,9 +35,7 @@ describe Spree::Wholesaler do
       }
       atts = {
         user_id: wholesaler.user_id,
-        company: wholesaler.company,
-        buyer_contact: wholesaler.buyer_contact,
-        phone: wholesaler.phone,
+        main_contact: wholesaler.main_contact,
         business_address_attributes: address_atts
       }
 
