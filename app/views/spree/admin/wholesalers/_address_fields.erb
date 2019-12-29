@@ -1,0 +1,61 @@
+<%= field_container f.object, :company, class: ["form-group", "business-row"] do %>
+  <%= f.label :company, Spree.t(:company) %><span class="req"> *</span>
+  <%= f.text_field :company, class: 'form-control' %>
+  <%= error_message_on f.object, :company %>
+<% end %>
+
+<%= field_container f.object, :address1, class: ["form-group", "business-row"] do %>
+  <%= f.label :address1, Spree.t(:street_address) %><span class="req"> *</span>
+  <%= f.text_field :address1, class: 'form-control' %>
+  <%= error_message_on f.object, :address1 %>
+<% end %>
+
+<%= field_container f.object, :address2, class: ["form-group", "business-row"] do %>
+  <%= f.label :address2, Spree.t(:street_address_2) %>
+  <%= f.text_field :address2, class: 'form-control' %>
+  <%= error_message_on f.object, :address2 %>
+<% end %>
+
+<%= field_container f.object, :city, class: ["form-group", "business-row"] do %>
+  <%= f.label :city, Spree.t(:city) %><span class="req"> *</span>
+  <%= f.text_field :city, class: 'form-control' %>
+  <%= error_message_on f.object, :city %>
+<% end %>
+
+<%= field_container f.object, :zipcode, class: ["form-group", "business-row"] do %>
+  <%= f.label :zipcode, Spree.t(:zip) %><span class="req"> *</span>
+  <%= f.text_field :zipcode, class: 'form-control' %>
+  <%= error_message_on f.object, :zipcode %>
+<% end %>
+
+<div class="form-group <%= "business-row" %>">
+  <%= f.label :country_id, Spree.t(:country) %><span class="req"> *</span>
+  <span id="business_country">
+    <%= f.collection_select :country_id, available_countries, :id, :name, {}, { class: 'select2' } %>
+  </span>
+</div>
+
+<%= field_container f.object, :state, class: ["form-group", "business-row"] do %>
+  <%= f.label :state_id, Spree.t(:state) %><span class="req"> *</span>
+  <span id="business_state">
+    <%= f.text_field :state_name,
+          style: "display: #{f.object.country.states.empty? ? 'block' : 'none' };",
+          disabled: !f.object.country.states.empty?, class: 'form-control state_name' %>
+    <%= f.collection_select :state_id, f.object.country.states.sort, :id, :name, { include_blank: true }, { class: 'select2', style: "display: #{f.object.country.states.empty? ? 'none' : 'block' };", disabled: f.object.country.states.empty? } %>
+  </span>
+  <%= error_message_on f.object, :state_id %>
+<% end %>
+
+<%= field_container f.object, :phone, class: ["form-group", "business-row"] do %>
+  <%= f.label :phone, Spree.t(:phone) %><span class="req"> *</span>
+  <%= f.phone_field :phone, class: 'form-control' %>
+  <%= error_message_on f.object, :phone %>
+<% end %>
+
+<% content_for :head do %>
+  <%= javascript_tag do %>
+    $(document).ready(function(){
+      $('span#business_country .select2').on('change', function() { update_state('business_'); });
+    });
+  <% end %>
+<% end %>

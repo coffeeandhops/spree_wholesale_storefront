@@ -7,7 +7,8 @@ FactoryBot.define do
 
   factory :wholesale_user_with_addresses, :parent => :user_with_addresses do
     after(:create) do |user, evaluator|
-      user.build_wholesaler(company: "ACME", buyer_contact: "Wile E Coyote", phone: "555-6677-88")
+      wholesaler = user.create_wholesaler(main_contact: "Wile E Coyote")
+      wholesaler.business_address = create(:business_address)
       user.save
       user.reload
     end
