@@ -1,10 +1,3 @@
-appraise 'spree-3-5' do
-  gem 'spree_core', '~> 3.5.0'
-  gem 'spree_backend', '~> 3.5.0'
-  gem 'spree_auth_devise', '~> 3.4.0'
-  gem 'rails-controller-testing'
-end
-
 appraise 'spree-3-7' do
   gem 'spree_core', '~> 3.7.0'
   gem 'spree_backend', '~> 3.7.0'

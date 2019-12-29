@@ -8,12 +8,12 @@ Gem::Specification.new do |s|
   s.platform    = Gem::Platform::RUBY
   s.name        = 'spree_wholesale_storefront'
   s.version     = SpreeWholesaleStorefront.version
-  s.summary     = 'Add extension summary here'
-  s.description = 'Add (optional) extension description here'
+  s.summary     = 'Adds wholesaler functionallity to backend and v2 api'
+  s.description = 'Wholesale price and accounts on backend and v2 api only. No front end.'
   s.required_ruby_version = '>= 2.2.7'
 
-  s.author    = 'You'
-  s.email     = 'you@example.com'
+  s.author    = 'Jason Kroll'
+  s.email     = 'jason@coffeeandhops.com'
   s.homepage  = 'https://github.com/your-github-handle/spree_wholesale_storefront'
   s.license = 'BSD-3-Clause'
 
