@@ -4,9 +4,16 @@ module SpreeWholesaleStorefront
     isolate_namespace Spree
     engine_name 'spree_wholesale_storefront'
 
+
     # use rspec for tests
     config.generators do |g|
       g.test_framework :rspec
+    end
+
+    config.autoload_paths += %W(#{config.root}/lib)
+
+    initializer 'spree.wholesale_storefront.environment', before: :load_config_initializers do
+      Spree::WholesaleStorefront::Config = ::Spree::WholesaleConfiguration.new
     end
 
     def self.activate

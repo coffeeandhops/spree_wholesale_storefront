@@ -1,14 +1,35 @@
 module SpreeWholesaleStorefront
   module Spree
     module VariantDecorator
-      
-      def self.prepended(base)
-        base.scope :wholesales, ->{where("spree_variants.wholesale_price NOT NULL")}
+      module ClassMethods
+        def wholesales
+          ::Spree::Variant.all.select { |v| !v.wholesale_price.nil? }
+        end
       end
 
-      def price_in(currency)
-        return super(currency) unless wholesale_price.present?
-        ::Spree::Price.new(variant_id: self.id, amount: self.wholesale_price, currency: currency)
+      def self.prepended(base)
+        base.has_many :wholesale_prices,
+          class_name: '::Spree::WholesalePrice',
+          dependent: :destroy,
+          inverse_of: :variant
+
+        base.include ::Spree::DefaultWholesalePrice
+
+        class << base
+          prepend ClassMethods
+        end
+      end
+
+      def wholesale_price_in(currency)
+        return wholesale_prices.detect { |price| price.currency == currency } || wholesale_prices.build(currency: currency)
+      end 
+      
+      def wholesale_amount_in(currency)
+        wholesale_price_in(currency).try(:amount)
+      end
+
+      def is_wholesaleable?
+        wholesale_price.present?
       end
 
     end
