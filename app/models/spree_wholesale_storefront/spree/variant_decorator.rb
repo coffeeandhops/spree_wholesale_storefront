@@ -20,8 +20,12 @@ module SpreeWholesaleStorefront
         end
       end
 
+      def price_in(currency)
+        prices.detect { |price| price.currency == currency && price.type != "Spree::WholesalePrice" } || prices.build(currency: currency)
+      end
+
       def wholesale_price_in(currency)
-        return wholesale_prices.detect { |price| price.currency == currency } || wholesale_prices.build(currency: currency)
+        return wholesale_prices.detect { |price| price.currency == currency && price.type == "Spree::WholesalePrice" } || wholesale_prices.build(currency: currency)
       end 
       
       def wholesale_amount_in(currency)
