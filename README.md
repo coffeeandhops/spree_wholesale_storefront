@@ -1,13 +1,27 @@
 # SpreeWholesaleStorefront
 
-Introduction goes here.
+A simple wholesale solution for Spree Commerce. Spree Wholesale Storefront adds wholesale pricing to products and wholesaler accounts to users in the backend, and Storefront V2 API routes.
+
+Inspired by the work here [https://github.com/patrickmcelwee/spree_wholesale](https://github.com/patrickmcelwee/spree_wholesale)
+
+### Note
+There are no frontend views in this extension.
+
 
 ## Installation
 
 1. Add this extension to your Gemfile with this line:
+
   ```ruby
-  gem 'spree_wholesale_storefront', github: '[your-github-handle]/spree_wholesale_storefront'
+  # spree 4.0
+  gem 'spree_wholesale_storefront', github: 'https://github.com/coffeeandhops/spree_wholesale_storefront, :branch => master'
   ```
+
+  ```ruby
+  # spree 3.7
+  gem 'spree_wholesale_storefront', github: 'https://github.com/coffeeandhops/spree_wholesale_storefront, :branch => 3-7-stable'
+  ```
+
 
 2. Install the gem using Bundler:
   ```ruby
@@ -29,7 +43,7 @@ First bundle your dependencies, then run `rake`. `rake` will default to building
 
 ```shell
 bundle
-bundle exec rake
+bundle exec rspec spec/
 ```
 
 When testing your applications integration with this extension you may use it's factories.
@@ -39,11 +53,11 @@ Simply add this require statement to your spec_helper:
 require 'spree_wholesale_storefront/factories'
 ```
 
+## To Do
 
-## Contributing
+* Write integration/feature tests for backend
+* Better admin routing logic styling
 
-If you'd like to contribute, please take a look at the
-[instructions](CONTRIBUTING.md) for installing dependencies and crafting a good
-pull request.
+## License
 
-Copyright (c) 2019 [name of extension creator], released under the New BSD License
+Copyright (c) 2019 Jason Kroll, released under the New BSD License
