@@ -1,4 +1,4 @@
-class CreateWholesalers < ActiveRecord::Migration[6.0]
+class CreateWholesalers < ActiveRecord::Migration[5.2]
   def change
     create_table :wholesalers do |t|
       t.references :user
