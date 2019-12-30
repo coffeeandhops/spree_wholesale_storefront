@@ -5,31 +5,16 @@ module Spree
     included do
       has_one :default_wholesale_price,
               -> { where currency: Spree::Config[:currency] },
-              class_name: '::Spree::WholesalePrice',
+              class_name: 'Spree::WholesalePrice',
               dependent: :destroy
 
-      delegate :wholesale_price, :wholesale_price=, :wholesale_currency=, to: :find_or_build_default_wholesale_price
+      delegate :display_wholesale_price, :display_wholesale_amount, :wholesale_price, :currency, :wholesale_price=,
+               :wholesale_price_including_vat_for, :currency=, to: :find_or_build_default_wholesale_price
 
       after_save :save_default_wholesale_price
 
       def default_wholesale_price
         Spree::WholesalePrice.unscoped { super }
-      end
-
-      def display_wholesale_price
-        find_or_build_default_wholesale_price.display_price
-      end
-
-      def display_wholesale_amount
-        find_or_build_default_wholesale_price.display_amount
-      end
-
-      def wholesale_price_including_vat_for(price_options)
-        find_or_build_default_wholesale_price.price_including_vat_for(price_options)
-      end
-
-      def default_wholesale_price
-        Spree::Price.unscoped { super }
       end
 
       def has_default_wholesale_price?
