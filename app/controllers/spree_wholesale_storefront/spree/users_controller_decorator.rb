@@ -2,7 +2,7 @@ module SpreeWholesaleStorefront
   module Spree
     module UsersControllerDecorator
       def self.prepended(base)
-        base.before_action :load_wholesaler, only: [:show, :edit, :new]
+        base.before_action :load_wholesaler
       end
 
       def wholesalers
