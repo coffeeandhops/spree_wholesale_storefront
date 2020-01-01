@@ -17,5 +17,6 @@ FactoryBot.define do
         address.association(:country)
       end
     end
+    after(:build) { |business_address| GeocoderStub.stub_with(business_address) }
   end
 end

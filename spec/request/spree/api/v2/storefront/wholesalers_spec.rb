@@ -21,6 +21,8 @@ describe 'API V2 Storefront Wholesalers Spec', type: :request do
         expect(json_response['data']).to have_attribute(:alternate_email).with_value(wholesaler.alternate_email)
         expect(json_response['data']).to have_attribute(:notes).with_value(wholesaler.notes)
         expect(json_response['data']).to have_attribute(:user_id).with_value(wholesaler.user_id)
+        expect(json_response['data']).to have_attribute(:latitude).with_value(wholesaler.latitude)
+        expect(json_response['data']).to have_attribute(:longitude).with_value(wholesaler.longitude)
       end
 
       context 'with params "include=business_address"' do

@@ -8,6 +8,7 @@ en:
       wholesale_price: Wholesale Price
       wholesale_configuration: Wholesale Settings
       minimum_order: Minimum Wholesale Order Value
+      google_map_api_key: Google Maps API Key
       success: "Wholesaler account created"
       failed: "Wholesaler account creation failed"
       update_success: "Wholesaler account updated"
