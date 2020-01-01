@@ -21,6 +21,13 @@ module SpreeWholesaleStorefront
         @wholesaler ||= @user.wholesaler.nil? ? @user.build_wholesaler : @user.wholesaler
       end
 
+      def serialize_collection(collection)
+        collection_serializer.new(
+          collection,
+          collection_options(collection)
+        ).serializable_hash
+      end
+      
     end
   end
 end

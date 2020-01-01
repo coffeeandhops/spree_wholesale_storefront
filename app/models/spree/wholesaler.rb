@@ -7,7 +7,7 @@ module Spree
     accepts_nested_attributes_for :business_address
     
     delegate :email, to: :user
-    delegate :company, :phone, :latitude, :longitude, to: :find_or_build_business_address
+    delegate :company, :phone, to: :find_or_build_business_address
 
     def find_or_build_business_address
       business_address ||= build_business_address(country: Spree::Country.new)
