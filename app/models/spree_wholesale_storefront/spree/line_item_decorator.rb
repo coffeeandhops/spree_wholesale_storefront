@@ -20,6 +20,10 @@ module SpreeWholesaleStorefront
         ::Spree::Money.new(wholesale_price, currency: currency)
       end
 
+      def display_total_wholesale_price
+        ::Spree::Money.new(total_wholesale_price, currency: currency)
+      end
+
       def is_wholesaleable?
         false if order.nil? || variant.nil?
         variant.is_wholesaleable? && order.is_wholesale?
