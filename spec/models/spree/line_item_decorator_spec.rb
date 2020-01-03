@@ -1,7 +1,7 @@
 require 'spec_helper'
 
 describe Spree::LineItem do
-  # let(:line_item) {create(:line_item)}
+  let(:line_item) {create(:line_item)}
   let(:wholesale_order) { create(:wholesale_over_min) }
   let(:wholesale_line_item) { wholesale_order.line_items.first }
   let(:order) { create :order_with_line_items, line_items_count: 2, line_items_price: 19.99 }
@@ -13,7 +13,7 @@ describe Spree::LineItem do
     it { is_expected.to respond_to(:is_wholesaleable?) }
     
     it "should get wholesale price" do
-      expect(wholesale_line_item.price).to eq(10.0)
+      expect(wholesale_line_item.price).to eq(wholesale_line_item.variant.wholesale_price)
     end
 
     it "should get regular price" do
@@ -42,7 +42,7 @@ describe Spree::LineItem do
       # expect(wholesale_line_item.variant).to receive(:wholesale_price_including_vat_for).and_return(12)
       wholesale_line_item.price = 13
       wholesale_line_item.update_price
-      expect(wholesale_line_item.price).to eq(10)
+      expect(wholesale_line_item.price).to eq(wholesale_line_item.variant.wholesale_price)
     end
 
     it 'copies over a variants differing price for another vat zone for non-wholesaleable' do
@@ -70,7 +70,7 @@ describe Spree::LineItem do
     it "copies over a variant's tax category" do
       wholesale_line_item.tax_category = nil
       wholesale_line_item.copy_tax_category
-      expect(wholesale_line_item.tax_category).to eq(line_item.variant.tax_category)
+      expect(wholesale_line_item.tax_category).to eq(wholesale_line_item.variant.tax_category)
     end
   end
 
