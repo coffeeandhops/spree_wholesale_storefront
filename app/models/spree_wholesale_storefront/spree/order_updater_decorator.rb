@@ -20,6 +20,7 @@ module SpreeWholesaleStorefront
           if should_update
             item.update_price
             item.save!
+            item.redo_adjustments
           end
         end
       end
