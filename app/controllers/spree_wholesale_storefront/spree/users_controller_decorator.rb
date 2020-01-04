@@ -2,7 +2,7 @@ module SpreeWholesaleStorefront
   module Spree
     module UsersControllerDecorator
       def self.prepended(base)
-        base.before_action :load_wholesaler, only: [:show, :edit, :new]
+        base.before_action :load_wholesaler
       end
 
       def wholesalers
@@ -18,7 +18,10 @@ module SpreeWholesaleStorefront
       private
 
       def load_wholesaler
-        @wholesaler ||= @user.wholesaler.nil? ? @user.build_wholesaler : @user.wholesaler
+        if @user
+          @wholesaler ||= @user.wholesaler.nil? ? @user.build_wholesaler : @user.wholesaler
+        end
+        nil
       end
 
       def serialize_collection(collection)
