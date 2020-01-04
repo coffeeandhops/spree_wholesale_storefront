@@ -9,7 +9,7 @@ describe 'API V2 Storefront Cart Spec', type: :request do
   let(:order) { create(:order, user: user, store: store, currency: currency) }
 
   let(:wholesale_over_min) { create(:wholesale_over_min, line_items_price: 20.00) }
-  let(:wholesale_over_min_multi) { create(:wholesale_over_min_multi, line_items_price: 25.00, line_items_quantity: 20, item_count: 2) }
+  let(:wholesale_over_min_multi) { create(:wholesale_over_min_multi, line_items_quantity: 20, item_count: 2) }
   let(:wholesale_under_min) { create(:wholesale_over_min, line_items_quantity: 29, line_items_price: 20.00) }
   let(:variant) { create(:variant) }
 
@@ -45,9 +45,15 @@ describe 'API V2 Storefront Cart Spec', type: :request do
       it_behaves_like 'returns 200 HTTP status'
 
       it 'should not be a wholesale order' do
+        currency = wholesale_under_min.currency
+        wholesale_price = wholesale_under_min.line_items.first.variant.wholesale_price
+        price = wholesale_under_min.line_items.first.variant.wholesale_price
+        qty = wholesale_under_min.line_items.first.quantity
+        expected_wholesale_total = wholesale_price * qty
+        display_total = ::Spree::Money.new(expected_wholesale_total, currency: currency).to_s
         expect(json_response['data']).to have_attribute(:is_wholesale).with_value(false)
-        expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value("290.0")
-        expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value("$290.00")
+        expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value(expected_wholesale_total.to_s)
+        expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_total)
       end
 
       context 'add wholesale item to push over minimum value' do
@@ -55,9 +61,11 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         before { execute }
 
         it 'returns correct wholesale response' do
+          expected_wholesale_total = (9.25 * 29) + (11.00 * 5)
+          display_total = ::Spree::Money.new(expected_wholesale_total, currency: currency).to_s
           expect(json_response['data']).to have_attribute(:is_wholesale).with_value(true)
-          expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value("345.0")
-          expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value("$345.00")
+          expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value(expected_wholesale_total.to_s)
+          expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_total)
         end
       end
 
@@ -78,9 +86,12 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         before { execute }
 
         it 'returns correct wholesale response' do
+          expected_wholesale_total = 11.0 * 40
+          display_total = ::Spree::Money.new(expected_wholesale_total, currency: currency).to_s
+
           expect(json_response['data']).to have_attribute(:is_wholesale).with_value(false)
-          expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value("440.0")
-          expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value("$440.00")
+          expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value(expected_wholesale_total.to_s)
+          expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_total)
           expect(json_response['data']).to have_attribute(:display_total).with_value("$800.00")
         end
       end
@@ -108,10 +119,13 @@ describe 'API V2 Storefront Cart Spec', type: :request do
 
         it_behaves_like 'returns 200 HTTP status'
 
-        it 'removes line item from the cart' do
+        it 'from the cart' do
+          expected_total = 19.99 * 20
+          display_total = ::Spree::Money.new(expected_total, currency: currency).to_s
+
           expect(wholesale_over_min_multi.line_items.count).to eq(1)
           expect(json_response['data']).to have_attribute(:is_wholesale).with_value(false)
-          expect(json_response['data']).to have_attribute(:display_total).with_value("$500.00")
+          expect(json_response['data']).to have_attribute(:display_total).with_value(display_total.to_s)
         end
       end
     end
@@ -164,8 +178,14 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         it_behaves_like 'returns 200 HTTP status'
 
         it 'successfully changes the quantity' do
+          expected_total = (5 * 19.99) + (20 * 19.99) # 499.75
+          expected_wholesale = (5 * 9.25) + (20 * 9.25) # 231.25
+          display_total = ::Spree::Money.new(expected_total, currency: currency).to_s
+          display_wholesale_total = ::Spree::Money.new(expected_wholesale, currency: currency).to_s
+
           expect(line_item.reload.quantity).to eq(5)
-          expect(json_response['data']).to have_attribute(:display_total).with_value("$625.00")
+          expect(json_response['data']).to have_attribute(:display_total).with_value(display_total)
+          expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_wholesale_total)
         end
       end
 
