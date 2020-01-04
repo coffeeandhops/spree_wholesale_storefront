@@ -18,7 +18,10 @@ module SpreeWholesaleStorefront
       private
 
       def load_wholesaler
-        @wholesaler ||= @user.wholesaler.nil? ? @user.build_wholesaler : @user.wholesaler
+        if @user
+          @wholesaler ||= @user.wholesaler.nil? ? @user.build_wholesaler : @user.wholesaler
+        end
+        nil
       end
 
       def serialize_collection(collection)
