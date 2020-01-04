@@ -36,6 +36,22 @@ module Spree
             ).serializable_hash
           end
 
+          def serialize_collection(collection)
+            collection_serializer.new(
+              collection,
+              collection_options(collection)
+            ).serializable_hash
+          end
+
+          def collection_options(collection)
+            {
+              links: collection_links(collection),
+              meta: collection_meta(collection),
+              include: resource_includes,
+              fields: sparse_fields
+            }
+          end
+
           def resource
             scope.find(params[:id])
           end
@@ -70,7 +86,8 @@ module Spree
 
           def scope_includes
             {
-              user: {}
+              user: {},
+              business_address: {}
             }
           end
         end

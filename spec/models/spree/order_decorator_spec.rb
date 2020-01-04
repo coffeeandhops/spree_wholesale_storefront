@@ -4,7 +4,7 @@ describe Spree::Order do
   context "wholesale orders" do
     let(:order) { create(:order_with_line_item_quantity) }
     let(:wholesale_order) { create(:wholesale_order) }
-    let(:wholesale_over_min) { create(:wholesale_over_min, line_items_price: 20.00) }
+    let(:wholesale_over_min) { create(:wholesale_over_min) }
     let(:user) { create(:user) }
     let(:wholesale_with_normal_user) { create(:wholesale_over_min, user: user) }
     let(:wholesale_under_min) { create(:wholesale_over_min, line_items_quantity: 29, line_items_price: 20.00) }
@@ -15,7 +15,7 @@ describe Spree::Order do
     it { is_expected.to respond_to(:wholesale_item_total) }
     
     it "should get wholesale total" do
-      expect(wholesale_over_min.wholesale_item_total).to eq(500.0)
+      expect(wholesale_over_min.wholesale_item_total).to eq(9.25 * 50)
     end
 
     it "should be a wholesale order" do
@@ -40,17 +40,20 @@ describe Spree::Order do
 
 
     it "should be a wholesale order if line_item pushes order over minimum" do
-      variant = create(:wholesale_variant, wholesale_price: 11.00, price: 20.00)
-      new_item = create(:wholesale_line_item, variant: variant)
+      variant = create(:wholesale_variant, wholesale_price: 50.00, price: 20.00)
+      new_item = create(:wholesale_line_item, variant: variant, quantity: 1)
       new_item.update_price
       wholesale_under_min.line_items << new_item
       wholesale_under_min.update_with_updater!
+
       expect(wholesale_under_min.is_wholesale?).to be true
-      expect(wholesale_under_min.item_total).to eq(301.00)
+      expect(wholesale_under_min.item_total).to eq((29 * 9.25) + 50.0)
+      expect(wholesale_under_min.wholesale_item_total).to eq((29 * 9.25) + 50.0)
     end
 
-    it "should note be a wholesale order if line_item removed" do
-      item_price = wholesale_over_min_multi.line_items.last.price
+    it "should not be a wholesale order if line_item removed" do
+      item_price = wholesale_over_min_multi.line_items.last.variant.price
+      item_wholesale_price = wholesale_over_min_multi.line_items.last.variant.wholesale_price
 
       i = wholesale_over_min_multi.line_items.last
       i.destroy!
@@ -58,7 +61,8 @@ describe Spree::Order do
       wholesale_over_min_multi.update_with_updater!
 
       expect(wholesale_over_min_multi.is_wholesale?).to be false
-      expect(wholesale_over_min_multi.item_total).to eq(item_price * 20)
+      expect(wholesale_over_min_multi.item_total).to eq(item_price * 20.0)
+      expect(wholesale_over_min_multi.wholesale_item_total).to eq(item_wholesale_price * 20.0)
     end
   end
 end
