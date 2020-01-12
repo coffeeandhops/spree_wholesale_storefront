@@ -29,4 +29,3 @@ module SpreeWholesaleStorefront
 end
 
 Spree::OrderUpdater.prepend SpreeWholesaleStorefront::Spree::OrderUpdaterDecorator
-
