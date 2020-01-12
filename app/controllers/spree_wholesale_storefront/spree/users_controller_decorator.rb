@@ -2,7 +2,7 @@ module SpreeWholesaleStorefront
   module Spree
     module UsersControllerDecorator
       def self.prepended(base)
-        base.before_action :load_wholesaler, except: :index
+        base.before_action :load_wholesaler, except: [:index, :update]
       end
 
       private
