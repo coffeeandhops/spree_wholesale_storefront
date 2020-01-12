@@ -1,6 +1,5 @@
 <!-- <%= render "spree/shared/error_messages", :target => @wholesaler %> -->
 <div class="row wholesaler-details ">
-  <div class="col-xs-12 col-md-6">
     <%= f.hidden_field :user_id %>
     <div class="form-group">
       <%= f.label :main_contact %><span class="req">*</span>
@@ -23,7 +22,6 @@
       <%= f.text_area :notes, class: 'form-control', rows: '4' %>
     </div>
   </div>
-  <div class="col-xs-12 col-md-6">
     <%= f.fields_for :business_address, (@wholesaler.business_address || Spree::BusinessAddress.default(@wholesaler, "business")) do |ba_form| %>
       <% ba_form.object ||= Spree::BusinessAddress.new(country: Spree::Country.new) %>
       <%= render partial: 'spree/admin/wholesalers/address_fields', locals: { f: ba_form } %>

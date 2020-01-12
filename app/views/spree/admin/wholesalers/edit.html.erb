@@ -5,11 +5,11 @@
   <%= Spree.t('spree_wholesale_storefront.edit_wholesaler') %>
 <% end %>
 
-<div data-hook="admin_user_wholesaler_form" class="panel panel-default mb-3">
-  <div class="panel-heading">
+<div data-hook="admin_user_wholesaler_form" class="card mb-3">
+  <div class="card-header">
     <div class="row ml-1 pb-0">
       <div class="col-xs-6">
-        <h1 class="panel-title mb-0 h5">
+        <h1 class="card-title mb-0 h5">
           Wholesaler Account Details
         </h1>
       </div>
@@ -26,7 +26,7 @@
 
     </div>
   </div>
-  <div class="panel-body" id="edit_wholesaler_form">
+  <div class="card-body" id="edit_wholesaler_form">
     <%= form_for [:admin, @user, @wholesaler], url: spree.admin_user_wholesaler_path(@wholesaler), :html => { :class => "wholesaler-form" } do |f| %>
       
       <%= render partial: 'spree/admin/wholesalers/fields', locals: { f: f } %>
