@@ -1,7 +1,15 @@
 module Spree
   module Admin
     class WholesalersController < ResourceController
+      before_action :load_user, except: :index
 
+      def edit
+        @wholesaler = Spree::Wholesaler.find(params[:id])
+      end
+
+      def new
+        @wholesaler = @user.build_wholesaler
+      end
 
       def create
         @wholesaler = Spree::Wholesaler.new(wholesaler_params)
@@ -35,6 +43,10 @@ module Spree
 
       private
 
+      def load_user
+        @user ||= ::Spree.user_class.find(params[:user_id])
+      end
+      
       def collection
         return @collection if @collection.present?
 

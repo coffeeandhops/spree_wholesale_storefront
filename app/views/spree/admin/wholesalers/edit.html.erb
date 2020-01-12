@@ -1,0 +1,40 @@
+<%= render partial: 'spree/admin/users/sidebar', locals: { current: :wholesaler, id: @user.id } %>
+
+<% content_for :page_title do %>
+  <%= link_to @user.email, spree.edit_admin_user_url(@user) %> /
+  <%= Spree.t('spree_wholesale_storefront.edit_wholesaler') %>
+<% end %>
+
+<div data-hook="admin_user_wholesaler_form" class="card mb-3">
+  <div class="card-header">
+    <div class="row ml-1 pb-0">
+      <div class="col-6">
+        <h1 class="card-title mb-0 h5">
+          Wholesaler Account Details
+        </h1>
+      </div>
+      <div class="col-6">
+        <% if !@wholesaler.new_record? %>
+          <%= form_for @wholesaler, url: spree.admin_user_wholesaler_path(@wholesaler), method: :delete, :html => { :class => "wholesaler-form pull-right float-right" } do |f| %>
+            <%= button_to "Delete Account", spree.admin_user_wholesaler_path(@wholesaler),
+              :method => :delete,
+              class: "btn btn-danger",
+              data: { confirm: Spree.t(:are_you_sure), action: 'remove' }%>
+          <% end %>
+        <% end %>
+      </div>
+
+    </div>
+  </div>
+  <div class="card-body" id="edit_wholesaler_form">
+    <%= form_for [:admin, @user, @wholesaler], url: spree.admin_user_wholesaler_path(@wholesaler), :html => { :class => "wholesaler-form" } do |f| %>
+      
+      <%= render partial: 'spree/admin/wholesalers/fields', locals: { f: f } %>
+
+      <div data-hook="admin_user_edit_form_button">
+        <%= render partial: 'spree/admin/shared/edit_resource_links', locals: { collection_url: spree.admin_users_url } %>
+      </div>
+
+    <% end %>
+  </div>  
+</div>

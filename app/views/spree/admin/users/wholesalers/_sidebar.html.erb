@@ -1,0 +1,13 @@
+<li>
+  <% if !@wholesaler.nil? && !@wholesaler.new_record? %>
+    <%= link_to_with_icon 'briefcase',
+      Spree.t(:"spree_wholesale_storefront.wholesaler"),
+      spree.edit_admin_user_wholesaler_path(@user, @wholesaler),
+      class: "nav-link #{'active' if current == :wholesaler}" %>
+  <% else %>
+    <%= link_to_with_icon 'briefcase',
+      Spree.t(:"spree_wholesale_storefront.wholesaler"),
+      spree.new_admin_user_wholesaler_path(@user, @wholesaler || @user.build_wholesaler),
+      class: "nav-link #{'active' if current == :wholesaler}" %>
+  <% end %>
+</li>
