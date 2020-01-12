@@ -1,13 +1,13 @@
 Spree::Core::Engine.add_routes do
   # Add your extension routes here
   namespace(:admin) do
+    resources :users do
+      resources :wholesalers, only: [:update, :create, :edit, :new]
+    end
 
-    resources :wholesalers
+    resources :wholesalers, only: :index
 
-    get '/users/wholesalers', to: 'users#wholesalers'
-
-    resource :wholesale_configurations
-
+    resource :wholesale_configurations, only: [:update, :edit]
   end
 
   namespace :api, defaults: { format: 'json' } do

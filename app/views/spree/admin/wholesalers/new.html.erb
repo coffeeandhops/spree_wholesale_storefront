@@ -1,0 +1,26 @@
+<%= render partial: 'spree/admin/users/sidebar', locals: { current: :wholesaler } %>
+<% content_for :page_title do %>
+  <%= link_to @user.email, spree.edit_admin_user_url(@user) %> /
+  <%= Spree.t('spree_wholesale_storefront.new_wholesaler') %>
+<% end %>
+
+<div data-hook="admin_user_wholesaler_form" class="panel panel-default mb-3">
+  <div class="panel-heading">
+    <div class="row ml-1 pb-0">
+      <div class="col-xs-6">
+        <h1 class="panel-title mb-0 h5">
+          Wholesaler Account Details
+        </h1>
+      </div>
+    </div>
+  </div>
+  <div class="panel-body">
+    <%= form_for [:admin, @user, @wholesaler], url: spree.admin_user_wholesalers_url, method: :post, :html => { :class => "wholesaler-form" } do |f| %>
+      <%= render partial: 'spree/admin/wholesalers/fields', locals: { f: f } %>
+
+      <div data-hook="admin_user_wholesaler_new_form_buttons">
+        <%= render partial: 'spree/admin/shared/new_resource_links', locals: {collection_url: spree.admin_users_url} %>
+      </div>
+    <% end %>
+  </div>
+</div>
