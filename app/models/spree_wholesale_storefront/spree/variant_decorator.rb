@@ -3,7 +3,8 @@ module SpreeWholesaleStorefront
     module VariantDecorator
       module ClassMethods
         def wholesales
-          ::Spree::Variant.all.select { |v| !v.wholesale_price.nil? }
+          # ::Spree::Variant.all.select { |v| !v.wholesale_price.nil? }
+          ::Spree::Variant.joins(:wholesale_prices).where('spree_wholesale_prices.amount > ?', 0.0)
         end
       end
 

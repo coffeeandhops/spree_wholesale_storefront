@@ -1,4 +1,4 @@
-version: '3.2'
+version: "3.2"
 services:
   app:
     build:
@@ -10,14 +10,14 @@ services:
       # DATABASE_SERVICE: 'db'
       # POSTGRES_USER: 'postgres'
       # POSTGRES_PASSWORD: 'postgres'
-      BUNDLE_PATH: '/gems'
-      RAILS_LOG_TO_STDOUT: 'true'
+      BUNDLE_PATH: "/gems"
+      RAILS_LOG_TO_STDOUT: "true"
       # SELENIUM_REMOTE_HOST: 'selenium'
     volumes:
       - .:/myapp
       - gems:/gems
     ports:
-      - '3000:3000'
+      - "3001:3001"
     command: bundle check || bundle install
     # command: ["sh", "bundle check || bundle install"]
   #   depends_on:

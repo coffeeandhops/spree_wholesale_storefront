@@ -1,9 +1,31 @@
 module SpreeWholesaleStorefront
   module Spree
     module LineItemDecorator
+      module ClassMethods
+        def wholesales
+          ::Spree::LineItem.joins(variant: :wholesale_prices).where('spree_wholesale_prices.amount > ?', 0.0)
+        end
+        
+        def non_wholesales
+          ::Spree::LineItem.joins(variant: :wholesale_prices).where('spree_wholesale_prices.amount = ?', 0.0)
+        end
+
+        def should_update_to_wholesale
+          ::Spree::LineItem.joins(variant: :wholesale_prices).where('spree_wholesale_prices.amount > 0.0 AND spree_wholesale_prices.amount <> price')
+        end
+
+        def should_update_to_non_wholesale
+          ::Spree::LineItem.joins(variant: :wholesale_prices).where('spree_wholesale_prices.amount > 0.0 AND spree_wholesale_prices.amount = price')
+        end
+      end
 
       def self.prepended(base)
         base.delegate :wholesale_price, to: :variant
+
+        class << base
+          prepend ClassMethods
+        end
+
       end
 
       def update_price
