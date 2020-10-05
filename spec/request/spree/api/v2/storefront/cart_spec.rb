@@ -6,10 +6,13 @@ describe 'API V2 Storefront Cart Spec', type: :request do
   let(:currency) { store.default_currency }
   let(:user)  { create(:user) }
   let(:wholesale_user)  { create(:wholesale_user) }
-  let(:order) { create(:order, user: user, store: store, currency: currency) }
+  let(:order) { create(:order_with_line_items, user: user, store: store, currency: currency, line_items_count: 29) }
+  let(:order_token) { { 'X-Spree-Order-Token' => order.token } }
 
   let(:wholesale_over_min) { create(:wholesale_over_min, line_items_price: 20.00) }
   let(:wholesale_over_min_multi) { create(:wholesale_over_min_multi, line_items_quantity: 20, item_count: 2) }
+  let(:wholesale_with_large_no) { create(:wholesale_with_large_no, line_items_quantity: 1, item_count: 29) }
+  
   let(:wholesale_under_min) { create(:wholesale_over_min, line_items_quantity: 29, line_items_price: 20.00) }
   let(:variant) { create(:variant) }
 
@@ -22,6 +25,7 @@ describe 'API V2 Storefront Cart Spec', type: :request do
   let(:wholesale_token_multi) { Doorkeeper::AccessToken.create!(resource_owner_id: wholesale_user.id, expires_in: nil) }
   let(:wholesale_headers_bearer_multi) { { 'Authorization' => "Bearer #{wholesale_token_multi.token}" } }
   let(:wholesale_headers_order_token_multi) { { 'X-Spree-Order-Token' => wholesale_over_min_multi.token } }
+  let(:wholesale_with_large_no_order_token) { { 'X-Spree-Order-Token' => wholesale_with_large_no.token } }
 
 
   let(:wholesale_under_token) { Doorkeeper::AccessToken.create!(resource_owner_id: wholesale_user.id, expires_in: nil) }
@@ -69,6 +73,60 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         end
       end
 
+      # it 'should not fail when item is out of stock' do
+      # end
+      
+      context 'should handle a shit ton in the cart' do
+      
+        let(:params) { { variant_id: wholesale_variant.id, quantity: 100000, options: options, include: 'variants,line_items,user' } }
+        before { execute }
+        it 'returns correct wholesale response for large qty' do
+          expected_wholesale_total = (9.25 * 29) + (11.00 * 100000)
+          display_total = ::Spree::Money.new(expected_wholesale_total, currency: currency).to_s
+          expect(json_response['data']).to have_attribute(:is_wholesale).with_value(true)
+          expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value(expected_wholesale_total.to_s)
+          expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_total)
+        end
+
+        context "non wholesale order" do
+          let(:headers) { order_token }
+          let(:params) { { variant_id: wholesale_variant.id, quantity: 1, options: options, include: 'variants,line_items,user' } }
+          before { execute }
+          it 'returns correct response for large no line items' do
+            expected_total = (10 * 29 * 1) + (20.00 * 1)
+            display_total = ::Spree::Money.new(expected_total, currency: currency).to_s
+            # pp json_response['data']
+            expect(json_response['data']).to have_attribute(:is_wholesale).with_value(false)
+            expect(json_response['data']).to have_attribute(:item_total).with_value(expected_total.to_s)
+            expect(json_response['data']).to have_attribute(:display_item_total).with_value(display_total)
+            expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value("11.0")
+            expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value("$11.00")
+          end
+        end
+
+        it 'should not be wholesale' do
+          expect(wholesale_with_large_no.line_items.count).to be(29)
+          expect(wholesale_with_large_no.is_wholesale?).to be false
+        end
+
+        context "large number of line_items" do
+
+          let(:headers) { wholesale_with_large_no_order_token }
+          # let(:headers) { order_token }
+          let(:params) { { variant_id: wholesale_variant.id, quantity: 28, options: options, include: 'variants,line_items,user' } }
+          before { execute }
+          it 'returns correct wholesale response for large no line items' do
+            expected_wholesale_total = (9.25 * 29 * 1) + (11.00 * 28)
+            # expected_wholesale_total = (10.0 * 29 * 1) + (11.00 * 28)
+            display_total = ::Spree::Money.new(expected_wholesale_total, currency: currency).to_s
+            expect(json_response['data']).to have_attribute(:is_wholesale).with_value(true)
+            expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value(expected_wholesale_total.to_s)
+            expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_total)
+          end
+        end
+        
+      end
+
     end
 
     context 'as a non wholesale user' do
@@ -86,13 +144,12 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         before { execute }
 
         it 'returns correct wholesale response' do
-          expected_wholesale_total = 11.0 * 40
+          expected_wholesale_total = 11.0 * 40.0
           display_total = ::Spree::Money.new(expected_wholesale_total, currency: currency).to_s
-
           expect(json_response['data']).to have_attribute(:is_wholesale).with_value(false)
           expect(json_response['data']).to have_attribute(:wholesale_item_total).with_value(expected_wholesale_total.to_s)
           expect(json_response['data']).to have_attribute(:display_wholesale_item_total).with_value(display_total)
-          expect(json_response['data']).to have_attribute(:display_total).with_value("$800.00")
+          expect(json_response['data']).to have_attribute(:display_total).with_value("$1,090.00")
         end
       end
 
@@ -122,7 +179,6 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         it 'from the cart' do
           expected_total = 19.99 * 20
           display_total = ::Spree::Money.new(expected_total, currency: currency).to_s
-
           expect(wholesale_over_min_multi.line_items.count).to eq(1)
           expect(json_response['data']).to have_attribute(:is_wholesale).with_value(false)
           expect(json_response['data']).to have_attribute(:display_total).with_value(display_total.to_s)
