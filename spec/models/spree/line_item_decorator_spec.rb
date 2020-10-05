@@ -11,7 +11,6 @@ describe Spree::LineItem do
   
     it { is_expected.to respond_to(:wholesale_price) }
     it { is_expected.to respond_to(:is_wholesaleable?) }
-    
     it "should get wholesale price" do
       expect(wholesale_line_item.price).to eq(wholesale_line_item.variant.wholesale_price)
     end

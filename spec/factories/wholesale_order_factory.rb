@@ -35,6 +35,23 @@ FactoryBot.define do
       end
     end
 
+    factory :wholesale_with_large_no, parent: :wholesale_order do
+      transient do
+        item_count { 1 }
+      end
+
+      after(:create) do |order, evaluator|
+        evaluator.item_count.times do
+          create(:wholesale_line_item, order: order, quantity: evaluator.line_items_quantity)
+        end
+        
+        order.line_items.reload # to ensure order.line_items is accessible after
+
+        order.update_with_updater!
+
+      end
+    end
+
   end
 
 end
