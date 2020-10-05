@@ -20,6 +20,7 @@ module SpreeWholesaleStorefront
 
       def minimum_order
         # minimum = ::Spree::WholesaleStorefront::Config[:minimum_order]
+        return false if user.nil? || !user.wholesaler?
         minimum = minimum_order_value
         wholesale_item_total >= minimum
       end
@@ -28,7 +29,7 @@ module SpreeWholesaleStorefront
       attr_accessor :config_minimum_order_value
 
       def minimum_order_value
-        config_minimum_order_value ||= ::Spree::WholesaleStorefront::Config[:minimum_order]
+        @config_minimum_order_value ||= ::Spree::WholesaleStorefront::Config[:minimum_order]
       end
 
     end

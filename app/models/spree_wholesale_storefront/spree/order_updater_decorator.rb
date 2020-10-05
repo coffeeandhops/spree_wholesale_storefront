@@ -15,7 +15,7 @@ module SpreeWholesaleStorefront
       end
 
       def update_line_items
-        order.line_items.reload
+        # order.line_items.reload
         if order.is_wholesale?
           should_update_items = line_items.should_update_to_wholesale
 
