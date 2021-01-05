@@ -7,6 +7,14 @@ module SpreeWholesaleStorefront
         super
       end
 
+
+
+      def update_item_total
+        if order.is_wholesale?
+        order.item_total = line_items.sum('price * quantity')
+        update_order_total
+      end
+
       def update_item_total
         return super unless order.is_wholesale?
         order.item_total = order.wholesale_item_total

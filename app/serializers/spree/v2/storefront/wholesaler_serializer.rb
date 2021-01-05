@@ -9,6 +9,9 @@ module Spree
     
         belongs_to :user
         belongs_to :business_address
+
+        has_many :wholesale_line_items
+
       end
     end
   end

@@ -17,6 +17,8 @@ module SpreeWholesaleStorefront
           dependent: :destroy,
           inverse_of: :variant
 
+        base.validates :check_wholesale_price
+        
         class << base
           prepend ClassMethods
         end
