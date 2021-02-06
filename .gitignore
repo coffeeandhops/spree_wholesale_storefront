@@ -13,3 +13,5 @@ tmp/**/*
 test/dummy
 spec/dummy
 .sass-cache
+Gemfile.lock
+gemfiles/*.gemfile.lock
