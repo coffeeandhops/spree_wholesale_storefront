@@ -28,6 +28,10 @@ module SpreeWholesaleStorefront
 
       end
 
+      def price
+        is_wholesaleable? ? wholesale_price : self[:price]
+      end
+
       def update_price
         if is_wholesaleable?
           self.price = variant.wholesale_price_including_vat_for(tax_zone: tax_zone)
