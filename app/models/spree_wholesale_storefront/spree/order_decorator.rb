@@ -14,7 +14,7 @@ module SpreeWholesaleStorefront
       end
 
       def wholesale_item_total
-        line_items.reload
+        # line_items.reload
         line_items.sum(&:total_wholesale_price)
       end
 
