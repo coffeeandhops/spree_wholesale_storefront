@@ -7,6 +7,13 @@ module SpreeWholesaleStorefront
       #   super
       # end
 
+      def update_item_total
+        # need to override this as the spree code uses ('price * quantity')
+        # which doesn't seem to take into account the override of the price getter
+        order.item_total = line_items.sum(&:total)
+        update_order_total
+      end
+
       # def update_item_total
       #   return super unless order.is_wholesale?
       #   order.item_total = order.wholesale_item_total
