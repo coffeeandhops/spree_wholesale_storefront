@@ -7,12 +7,12 @@ module SpreeWholesaleStorefront
       #   super
       # end
 
-      def update_item_total
-        return super unless order.is_wholesale?
-        order.item_total = order.wholesale_item_total
-        # order.item_total = line_items.sum(&:total_wholesale_price)
-        update_order_total
-      end
+      # def update_item_total
+      #   return super unless order.is_wholesale?
+      #   order.item_total = order.wholesale_item_total
+      #   # order.item_total = line_items.sum(&:total_wholesale_price)
+      #   update_order_total
+      # end
 
       # def update_line_items
       #   # order.line_items.reload
