@@ -6,6 +6,8 @@ module SpreeWholesaleStorefront
         base.attribute :display_wholesale_price, &:display_wholesale_price
         base.attribute :is_wholesaleable, &:is_wholesaleable?
         base.attribute :display_total_wholesale_price, &:display_total_wholesale_price
+
+        base.belongs_to :variant
       end
     end
   end
