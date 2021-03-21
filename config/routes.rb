@@ -2,7 +2,7 @@ Spree::Core::Engine.add_routes do
   # Add your extension routes here
   namespace(:admin) do
     resources :users do
-      resources :wholesalers, only: [:update, :create, :edit, :new]
+      resources :wholesalers, only: [:update, :create, :edit, :new, :destroy]
     end
 
     resources :wholesalers, only: :index
