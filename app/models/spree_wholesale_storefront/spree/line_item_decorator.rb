@@ -28,9 +28,9 @@ module SpreeWholesaleStorefront
 
       end
 
-      def price
-        is_wholesaleable? ? wholesale_price : self[:price]
-      end
+      # def price
+      #   is_wholesaleable? ? wholesale_price : self[:price]
+      # end
 
       def update_price
         if is_wholesaleable?
