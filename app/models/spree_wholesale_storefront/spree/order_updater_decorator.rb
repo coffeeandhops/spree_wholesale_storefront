@@ -20,7 +20,13 @@ module SpreeWholesaleStorefront
       end
 
       def update_adjustment_total
+        pp "###############################"
+        pp "recalculate_adjustments START"
+        pp "###############################"
         recalculate_adjustments
+        pp "###############################"
+        pp "recalculate_adjustments FINISH"
+        pp "###############################"
         order.adjustment_total = line_items.sum(:adjustment_total) +
           shipments.sum(:adjustment_total) +
           adjustments.eligible.sum(:amount)
@@ -36,8 +42,14 @@ module SpreeWholesaleStorefront
         order.promo_total = line_items.sum(:promo_total) +
           shipments.sum(:promo_total) +
           adjustments.promotion.eligible.sum(:amount)
-  
+        
+        pp "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+        pp "update_order_total in update_adjustment_total START"
+        pp "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
         update_order_total
+        pp "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
+        pp "update_order_total in update_adjustment_total FINISH"
+        pp "&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&"
       end
 
       def persist_totals
