@@ -37,7 +37,7 @@ module SpreeWholesaleStorefront
 
       def copy_price
         if variant
-          update_price if price.nil? || wholesale_price.nil?
+          update_price if price.nil? || wholesale_price.nil? || wholesale_price != variant.wholesale_price
           self.cost_price = variant.cost_price if cost_price.nil?
           self.currency = variant.currency if currency.nil?
         end
