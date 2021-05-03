@@ -21,7 +21,7 @@ module SpreeWholesaleStorefront
           if (item.class.to_s == 'Spree::LineItem')
             wholesale_pre_tax_amount = item.discounted_wholesale_amount
             if included_rates.any?
-              wholesale_pre_tax_amount /= (1 + included_rates.sum(&:wholesale_amount))
+              wholesale_pre_tax_amount /= (1 + included_rates.sum(&:amount))
             end
             item.update_column(:wholesale_pre_tax_amount, wholesale_pre_tax_amount)
           end
