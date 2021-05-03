@@ -63,9 +63,6 @@ describe 'API V2 Storefront Cart Spec', type: :request do
         end
       end
 
-      # it 'should not fail when item is out of stock' do
-      # end
-      
       context 'should handle a shit ton in the cart' do
       
         let(:params) { { variant_id: wholesale_variant.id, quantity: 100000, options: options, include: 'variants,line_items,user' } }
