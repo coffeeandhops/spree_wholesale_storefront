@@ -15,6 +15,8 @@ describe Spree::Order do
     it { is_expected.to respond_to(:wholesale_item_total) }
     
     it "should get wholesale total" do
+      wholesale_over_min.update_with_updater!
+      wholesale_over_min.reload
       expect(wholesale_over_min.wholesale_item_total).to eq(9.25 * 50)
     end
 
@@ -47,22 +49,20 @@ describe Spree::Order do
       wholesale_under_min.update_with_updater!
 
       expect(wholesale_under_min.is_wholesale?).to be true
-      expect(wholesale_under_min.item_total).to eq((29 * 9.25) + 50.0)
       expect(wholesale_under_min.wholesale_item_total).to eq((29 * 9.25) + 50.0)
     end
 
     it "should not be a wholesale order if line_item removed" do
-      item_price = wholesale_over_min_multi.line_items.last.variant.price
-      item_wholesale_price = wholesale_over_min_multi.line_items.last.variant.wholesale_price
+      order = create(:wholesale_over_min_multi, line_items_quantity: 20, item_count: 2)
 
-      i = wholesale_over_min_multi.line_items.last
+      i = order.line_items.last
       i.destroy!
-      wholesale_over_min_multi.line_items.reload
-      wholesale_over_min_multi.update_with_updater!
+      order.line_items.reload
+      order.update_with_updater!
 
-      expect(wholesale_over_min_multi.is_wholesale?).to be false
-      expect(wholesale_over_min_multi.item_total).to eq(item_price * 20.0)
-      expect(wholesale_over_min_multi.wholesale_item_total).to eq(item_wholesale_price * 20.0)
+      expect(order.is_wholesale?).to be false
+      expect(order.item_total).to eq(10.0 * 20)
+      expect(order.wholesale_item_total).to eq(9.25 * 20.0)
     end
   end
 end

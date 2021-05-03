@@ -33,7 +33,6 @@ module SpreeWholesaleStorefront
       def is_wholesaleable?
         wholesale_price.present? && wholesale_price > 0
       end
-
     end
   end
 end

@@ -20,20 +20,32 @@ module SpreeWholesaleStorefront
       end
 
       def self.prepended(base)
-        base.delegate :wholesale_price, to: :variant
-
+        # base.delegate :wholesale_price, to: :variant
+        
         class << base
           prepend ClassMethods
         end
+        base.extend ::Spree::DisplayMoney
 
+        base.money_methods :wholesale_amount, :total_wholesale_price, :final_wholesale_amount, :wholesale_total, :wholesale_price,
+                           :wholesale_adjustment_total, :wholesale_additional_tax_total, :wholesale_promo_total, :wholesale_included_tax_total,
+                          :wholesale_pre_tax_amount
+  
+        # base.alias single_wholesale_money display_wholesale_price
+        # base.alias single_display_wholesale_amount display_wholesale_price
+      end
+
+      def copy_price
+        if variant
+          update_price if price.nil? || wholesale_price.nil?
+          self.cost_price = variant.cost_price if cost_price.nil?
+          self.currency = variant.currency if currency.nil?
+        end
       end
 
       def update_price
-        if is_wholesaleable?
-          self.price = variant.wholesale_price_including_vat_for(tax_zone: tax_zone)
-        else
-          self.price = variant.price_including_vat_for(tax_zone: tax_zone)
-        end
+        self.price = variant.price_including_vat_for(tax_zone: tax_zone)
+        self.wholesale_price = variant.wholesale_price_including_vat_for(tax_zone: tax_zone)
       end
 
       def total_wholesale_price
@@ -41,13 +53,13 @@ module SpreeWholesaleStorefront
         wholesale_price * quantity
       end
       
-      def display_wholesale_price
-        ::Spree::Money.new(wholesale_price, currency: currency)
-      end
+      # def display_wholesale_price
+      #   ::Spree::Money.new(wholesale_price, currency: currency)
+      # end
 
-      def display_total_wholesale_price
-        ::Spree::Money.new(total_wholesale_price, currency: currency)
-      end
+      # def display_total_wholesale_price
+      #   ::Spree::Money.new(total_wholesale_price, currency: currency)
+      # end
 
       def is_wholesaleable?
         false if order.nil? || variant.nil?
@@ -57,6 +69,22 @@ module SpreeWholesaleStorefront
       def redo_adjustments
         recalculate_adjustments
         update_tax_charge # Called to ensure pre_tax_amount is updated.
+      end
+
+      def wholesale_amount
+        (wholesale_price || 0.0) * quantity
+      end
+  
+      alias wholesale_subtotal wholesale_amount
+  
+      def wholesale_taxable_amount
+        wholesale_amount + taxable_adjustment_total
+      end
+  
+      alias discounted_wholesale_amount wholesale_taxable_amount
+  
+      def final_wholesale_amount
+        wholesale_amount + adjustment_total
       end
 
     end
