@@ -12,7 +12,7 @@ module SpreeWholesaleStorefront
         def compute_shipment_or_line_item(item)
           amount = item.pre_tax_amount
           discount_amount = item.discounted_amount
-          if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale) && item.order.reload.is_wholesale
+          if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale) && item.order.is_wholesale
             amount = item.wholesale_pre_tax_amount
             discount_amount = item.discounted_wholesale_amount
             pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"

@@ -11,6 +11,7 @@ module SpreeWholesaleStorefront
         order.total = order.item_total + order.shipment_total + order.adjustment_total
         order.wholesale_total = order.wholesale_item_total + order.shipment_total + order.adjustment_total
         order.is_wholesale = order.minimum_order?
+        order.update_column(is_wholesale: order.minimum_order?)
       end
 
       def update_item_total
