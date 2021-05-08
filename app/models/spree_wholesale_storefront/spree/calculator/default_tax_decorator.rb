@@ -4,6 +4,11 @@ module SpreeWholesaleStorefront
     module Calculator
       module TaxRateDecorator
 
+        def self.prepended(base)
+          base.alias compute_shipment compute_shipment_or_line_item
+          base.alias compute_line_item compute_shipment_or_line_item
+        end
+
         def compute_shipment_or_line_item(item)
           amount = item.pre_tax_amount
           discount_amount = item.discounted_amount
