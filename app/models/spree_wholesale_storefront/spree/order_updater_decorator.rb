@@ -31,13 +31,15 @@ module SpreeWholesaleStorefront
           shipments.sum(:adjustment_total) +
           adjustments.eligible.sum(:amount)
         
-        if order.is_wholesale
-          order.included_tax_total = line_items.sum(:wholesale_included_tax_total) + shipments.sum(:included_tax_total)
-          order.additional_tax_total = line_items.sum(:wholesale_additional_tax_total) + shipments.sum(:additional_tax_total)
-        else
-          order.included_tax_total = line_items.sum(:included_tax_total) + shipments.sum(:included_tax_total)
-          order.additional_tax_total = line_items.sum(:additional_tax_total) + shipments.sum(:additional_tax_total)
-        end
+        # if order.is_wholesale
+        #   order.included_tax_total = line_items.sum(:wholesale_included_tax_total) + shipments.sum(:included_tax_total)
+        #   order.additional_tax_total = line_items.sum(:wholesale_additional_tax_total) + shipments.sum(:additional_tax_total)
+        # else
+        #   order.included_tax_total = line_items.sum(:included_tax_total) + shipments.sum(:included_tax_total)
+        #   order.additional_tax_total = line_items.sum(:additional_tax_total) + shipments.sum(:additional_tax_total)
+        # end
+        order.included_tax_total = line_items.sum(:included_tax_total) + shipments.sum(:included_tax_total)
+        order.additional_tax_total = line_items.sum(:additional_tax_total) + shipments.sum(:additional_tax_total)
 
         order.promo_total = line_items.sum(:promo_total) +
           shipments.sum(:promo_total) +
