@@ -20,7 +20,6 @@ module SpreeWholesaleStorefront
       end
 
       def self.prepended(base)
-        # base.delegate :wholesale_price, to: :variant
         
         class << base
           prepend ClassMethods
@@ -30,9 +29,7 @@ module SpreeWholesaleStorefront
         base.money_methods :wholesale_amount, :total_wholesale_price, :final_wholesale_amount, :wholesale_total, :wholesale_price,
                            :wholesale_adjustment_total, :wholesale_additional_tax_total, :wholesale_promo_total, :wholesale_included_tax_total,
                           :wholesale_pre_tax_amount
-  
-        # base.alias single_wholesale_money display_wholesale_price
-        # base.alias single_display_wholesale_amount display_wholesale_price
+ 
       end
 
       def copy_price
@@ -44,12 +41,6 @@ module SpreeWholesaleStorefront
       end
 
       def update_price
-        pp "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
-        pp "update price for line_item #{id}"
-        pp "price.nil? = #{price.nil?}"
-        pp " wholesale_price.nil? = #{ wholesale_price.nil?}"
-        pp "wholesale_price != variant.wholesale_price = #{wholesale_price != variant.wholesale_price}"
-        pp "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
         self.price = variant.price_including_vat_for(tax_zone: tax_zone)
         self.wholesale_price = variant.wholesale_price_including_vat_for(tax_zone: tax_zone)
       end
@@ -59,14 +50,6 @@ module SpreeWholesaleStorefront
         wholesale_price * quantity
       end
       
-      # def display_wholesale_price
-      #   ::Spree::Money.new(wholesale_price, currency: currency)
-      # end
-
-      # def display_total_wholesale_price
-      #   ::Spree::Money.new(total_wholesale_price, currency: currency)
-      # end
-
       def is_wholesaleable?
         false if order.nil? || variant.nil?
         variant.is_wholesaleable? && order.is_wholesale?

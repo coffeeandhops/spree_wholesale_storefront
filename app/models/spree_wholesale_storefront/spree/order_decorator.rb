@@ -13,17 +13,10 @@ module SpreeWholesaleStorefront
         total_to_check ||= wholesale_item_total
         return false if user.nil? || !user.wholesaler?
         total_to_check >= minimum_order_value
-        # is_wholesale
-        # !user.nil? && user.wholesaler? && minimum_order
       end
 
-      # def wholesale_item_total
-      #   line_items.reload
-      #   line_items.sum(&:total_wholesale_price)
-      # end
 
       def minimum_order?
-        # minimum = ::Spree::WholesaleStorefront::Config[:minimum_order]
         return false if user.nil? || !user.wholesaler?
         wholesale_item_total >= minimum_order_value
       end
