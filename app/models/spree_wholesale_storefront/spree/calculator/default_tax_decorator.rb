@@ -12,19 +12,26 @@ module SpreeWholesaleStorefront
         def compute_shipment_or_line_item(item)
           amount = item.pre_tax_amount
           discount_amount = item.discounted_amount
-          if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale) && item.order.is_wholesale
-            amount = item.wholesale_pre_tax_amount
-            discount_amount = item.discounted_wholesale_amount
-            pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
-            pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
-            pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
-            pp "In the right tax calculator"
-            pp amount
-            pp discount_amount
-            pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
-            pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
-            pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
-           end
+          order_total = item.order.item_total + order.shipment_total + order.adjustment_total
+
+          if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale?)
+            total = item.order.wholesale_item_total
+            if item.order.is_wholesale?(total)
+              amount = item.wholesale_pre_tax_amount
+              discount_amount = item.discounted_wholesale_amount
+              pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
+              pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
+              pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
+              pp "In the right tax calculator"
+              pp amount
+              pp discount_amount
+              pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
+              pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
+              pp "()()()()()()()()()()()()()()()()()()()()()()()()()()"
+  
+            end
+          end
+
           if rate.included_in_price
             deduced_total_by_rate(amount, rate)
           else

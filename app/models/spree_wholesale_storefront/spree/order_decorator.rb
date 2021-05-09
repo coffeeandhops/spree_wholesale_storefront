@@ -9,8 +9,11 @@ module SpreeWholesaleStorefront
 
       end
 
-      def is_wholesale?
-        is_wholesale
+      def is_wholesale?(total_to_check = nil)
+        total_to_check ||= wholesale_item_total
+        return false if user.nil? || !user.wholesaler?
+        total_to_check >= minimum_order_value
+        # is_wholesale
         # !user.nil? && user.wholesaler? && minimum_order
       end
 
@@ -22,8 +25,7 @@ module SpreeWholesaleStorefront
       def minimum_order?
         # minimum = ::Spree::WholesaleStorefront::Config[:minimum_order]
         return false if user.nil? || !user.wholesaler?
-        minimum = minimum_order_value
-        wholesale_item_total >= minimum
+        wholesale_item_total >= minimum_order_value
       end
 
       private
