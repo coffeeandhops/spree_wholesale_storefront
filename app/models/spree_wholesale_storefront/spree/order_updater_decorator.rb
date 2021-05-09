@@ -11,11 +11,14 @@ module SpreeWholesaleStorefront
       # end
 
       def update_order_total
-        order.total = order.item_total + order.shipment_total + order.adjustment_total
         order.wholesale_total = order.wholesale_item_total + order.shipment_total + order.adjustment_total
-        order.is_wholesale = order.minimum_order?
+        order.is_wholesale = order.is_wholelsale?(order.wholesale_total)
         @wholesale_change = @current_wholesale_status != order.is_wholesale
-        # order.update_column(is_wholesale: order.minimum_order?)
+        if order.is_wholesale
+          order.total = order.wholesale_total
+        else
+          order.total = order.item_total + order.shipment_total + order.adjustment_total
+        end
       end
 
       def update_item_total
