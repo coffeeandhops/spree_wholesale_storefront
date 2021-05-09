@@ -1,6 +1,9 @@
 module SpreeWholesaleStorefront
   module Spree
     module OrderUpdaterDecorator
+      def self.prepended(base)
+        base.attr_reader :wholesale_change
+      end
 
       # def update
       #   update_line_items
@@ -8,9 +11,11 @@ module SpreeWholesaleStorefront
       # end
 
       def update_order_total
+        current_wholesale_status = order.is_wholesale
         order.total = order.item_total + order.shipment_total + order.adjustment_total
         order.wholesale_total = order.wholesale_item_total + order.shipment_total + order.adjustment_total
         order.is_wholesale = order.minimum_order?
+        wholesale_change = current_wholesale_status != order.is_wholesale
         # order.update_column(is_wholesale: order.minimum_order?)
       end
 
@@ -25,7 +30,7 @@ module SpreeWholesaleStorefront
         pp "recalculate_adjustments START"
         pp "###############################"
         non_item_adjustments = order.all_adjustments.where.not(adjustable_type: 'Spree::LineItem')
-        recalculate_adjustments if non_item_adjustments.any?
+        recalculate_adjustments if non_item_adjustments.any? || wholesale_change
         pp "###############################"
         pp "recalculate_adjustments FINISH"
         pp "###############################"
