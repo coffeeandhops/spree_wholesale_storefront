@@ -11,7 +11,7 @@ module SpreeWholesaleStorefront
         order.total = order.item_total + order.shipment_total + order.adjustment_total
         order.wholesale_total = order.wholesale_item_total + order.shipment_total + order.adjustment_total
         order.is_wholesale = order.minimum_order?
-        order.update_column(is_wholesale: order.minimum_order?)
+        # order.update_column(is_wholesale: order.minimum_order?)
       end
 
       def update_item_total
@@ -24,7 +24,8 @@ module SpreeWholesaleStorefront
         pp "###############################"
         pp "recalculate_adjustments START"
         pp "###############################"
-        recalculate_adjustments
+        non_item_adjustments = order.all_adjustments.where.not(adjustable_type: 'Spree::LineItem')
+        recalculate_adjustments if non_item_adjustments.any?
         pp "###############################"
         pp "recalculate_adjustments FINISH"
         pp "###############################"
