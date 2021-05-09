@@ -2,7 +2,7 @@ module SpreeWholesaleStorefront
   module Spree
     module OrderUpdaterDecorator
       def self.prepended(base)
-        base.attr_reader :wholesale_change
+        base.attr_accessor :wholesale_change, :current_wholesale_status
       end
 
       # def update
@@ -14,12 +14,12 @@ module SpreeWholesaleStorefront
         order.total = order.item_total + order.shipment_total + order.adjustment_total
         order.wholesale_total = order.wholesale_item_total + order.shipment_total + order.adjustment_total
         order.is_wholesale = order.minimum_order?
-        wholesale_change = current_wholesale_status != order.is_wholesale
+        @wholesale_change = @current_wholesale_status != order.is_wholesale
         # order.update_column(is_wholesale: order.minimum_order?)
       end
 
       def update_item_total
-        current_wholesale_status = order.is_wholesale
+        @current_wholesale_status = order.is_wholesale
         super
         order.wholesale_item_total = line_items.sum('wholesale_price * quantity')
         update_order_total
