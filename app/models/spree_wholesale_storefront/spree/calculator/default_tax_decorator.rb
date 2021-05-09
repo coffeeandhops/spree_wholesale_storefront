@@ -12,7 +12,6 @@ module SpreeWholesaleStorefront
         def compute_shipment_or_line_item(item)
           amount = item.pre_tax_amount
           discount_amount = item.discounted_amount
-          order_total = item.order.item_total + order.shipment_total + order.adjustment_total
 
           if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale?)
             total = item.order.wholesale_item_total
