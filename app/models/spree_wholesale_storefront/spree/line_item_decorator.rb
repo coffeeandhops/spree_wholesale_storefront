@@ -46,6 +46,9 @@ module SpreeWholesaleStorefront
       def update_price
         pp "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
         pp "update price for line_item #{id}"
+        pp "price.nil? = #{price.nil?}"
+        pp " wholesale_price.nil? = #{ wholesale_price.nil?}"
+        pp "wholesale_price != variant.wholesale_price = #{wholesale_price != variant.wholesale_price}"
         pp "%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%"
         self.price = variant.price_including_vat_for(tax_zone: tax_zone)
         self.wholesale_price = variant.wholesale_price_including_vat_for(tax_zone: tax_zone)
