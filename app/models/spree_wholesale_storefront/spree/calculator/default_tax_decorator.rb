@@ -13,7 +13,7 @@ module SpreeWholesaleStorefront
           amount = item.pre_tax_amount
           discount_amount = item.discounted_amount
 
-          if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale?)
+          if item.respond_to?(:order) && item.order.respond_to?(:is_wholesale?) && item.respond_to?(:wholesale_pre_tax_amount)
             total = item.order.line_items.sum('wholesale_price * quantity')
             if item.order.is_wholesale?(total)
               amount = item.wholesale_pre_tax_amount
