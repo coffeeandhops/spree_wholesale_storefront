@@ -7,7 +7,7 @@ module SpreeWholesaleStorefront
 
       def update_order_total
         order.wholesale_total = order.wholesale_item_total + order.shipment_total + order.adjustment_total
-        order.is_wholesale = order.is_wholesale?(order.wholesale_total)
+        order.is_wholesale = order.is_wholesale?(order.wholesale_item_total)
         @wholesale_change = @current_wholesale_status != order.is_wholesale
         if order.is_wholesale
           order.total = order.wholesale_total
