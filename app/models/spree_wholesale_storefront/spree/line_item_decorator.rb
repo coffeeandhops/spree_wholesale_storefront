@@ -60,6 +60,14 @@ module SpreeWholesaleStorefront
         update_tax_charge # Called to ensure pre_tax_amount is updated.
       end
 
+      def amount
+        if is_wholesaleable?
+          return wholesale_price * quantity 
+        else
+          return price * quantity
+        end
+      end
+
       def wholesale_amount
         (wholesale_price || 0.0) * quantity
       end
