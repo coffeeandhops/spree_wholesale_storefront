@@ -3,7 +3,7 @@ class Spree::WholesalerAbility
 
   def initialize(user)
     user ||= Spree.user_class.new
-    if user.admin?
+    if user.respond_to?(:has_spree_role?) && user.has_spree_role?('admin')
       can :manage, :all
     else
       can :read, :all
