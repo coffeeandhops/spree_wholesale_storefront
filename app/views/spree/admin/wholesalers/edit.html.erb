@@ -15,8 +15,8 @@
       </div>
       <div class="col-6">
         <% if !@wholesaler.new_record? %>
-          <%= form_for @wholesaler, url: spree.admin_user_wholesaler_path(@wholesaler), method: :delete, :html => { :class => "wholesaler-form pull-right float-right" } do |f| %>
-            <%= button_to "Delete Account", spree.admin_user_wholesaler_path(@wholesaler),
+          <%= form_for @wholesaler, url: spree.admin_user_wholesaler_path(@wholesaler, @user), method: :delete, :html => { :class => "wholesaler-form pull-right float-right" } do |f| %>
+            <%= button_to "Delete Account", spree.admin_user_wholesaler_path(@wholesaler, @user),
               :method => :delete,
               class: "btn btn-danger",
               data: { confirm: Spree.t(:are_you_sure), action: 'remove' }%>
@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="card-body" id="edit_wholesaler_form">
-    <%= form_for [:admin, @user, @wholesaler], url: spree.admin_user_wholesaler_path(@wholesaler), :html => { :class => "wholesaler-form" } do |f| %>
+    <%= form_for [:admin, @user, @wholesaler], url: spree.admin_user_wholesaler_path(@wholesaler, @user), :html => { :class => "wholesaler-form" } do |f| %>
       
       <%= render partial: 'spree/admin/wholesalers/fields', locals: { f: f } %>
 
